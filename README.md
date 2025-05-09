@@ -6,6 +6,15 @@ This is a flask-based chatbot deployed on Google Cloud that answers questions ab
 A local CSV file, created via a python ETL pipeline
 A live public API (OpenWeatherMap)
 
+## Supported Cities
+
+This chatbot currently supports the following cities for both historical and current weather queries:
+
+New York, Los Angeles, Tokyo
+
+Messages need to include one of these cities to return a valid response. 
+
+
 ## Public Endpoint
 You can send POST requests to the chatbot at: 
 
@@ -26,3 +35,5 @@ Or, for live weather :
 curl -X POST http://34.136.163.228:8080/chat \
 -H "Content-Type: application/json" \
 -d '{"message":"What is the current weather in New York?"}'
+
+
