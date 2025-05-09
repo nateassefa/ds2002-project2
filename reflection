@@ -1,0 +1,40 @@
+## Dataset Selection
+
+Our team chose to build a weather chatbot because weather data is universally relevant, dynamic, and has both real-time and historical value. For the live data source, we used the OpenWeatherMap API due to its accessible documentation and free tier. For the local data, we selected a CSV dataset containing daily temperatures for 1,000 global cities from 1980 to 2020. This dataset provided a rich historical context that allowed us to support questions about past weather trends.
+
+---
+
+## ETL Pipeline & Technical Process
+
+We wrote a Python-based ETL script to process the raw CSV. The dataset included unnecessary metadata rows, mixed types, and many null values. We cleaned the dataset by skipping metadata, selecting a subset of cities (New York, Los Angeles, and Tokyo), melting the data into long format, and removing invalid or missing temperature values. The cleaned data was saved into `cleaned_weather.csv`, which the Flask chatbot loads to answer historical weather queries.
+
+The Flask chatbot includes a `/chat` POST route. It parses user input, detects if a date is provided, and then either:
+- Responds with historical data from our local CSV
+- Or fetches live data from the OpenWeatherMap API if the user asks about today or current weather
+
+We also implemented error handling for missing inputs, unsupported cities, and API failures.
+
+---
+
+## Challenges Faced
+
+The biggest technical challenge was cleaning the raw dataset. The CSV had four metadata rows at the top, and many city names contained unexpected characters or whitespace. We had to experiment with several `pandas` methods to parse the correct header and format the DataFrame into a usable structure. Another challenge was deploying on GCP — we faced issues with port 8080 access until we realized that we had mistakenly created a firewall policy instead of a VPC firewall rule.
+
+Debugging live API calls was also tricky, especially when the API returned errors for unsupported cities or rate-limiting issues. Ensuring the chatbot failed gracefully in those cases required additional try-except blocks and fallback responses.
+
+---
+
+## Key Learnings and Discoveries
+
+- We gained hands-on experience writing an end-to-end ETL pipeline and transforming messy real-world data into a clean dataset.
+- We learned how to integrate Flask with external APIs and structure routes to handle dynamic user input.
+- Most importantly, we learned how to deploy a Python app on GCP using gunicorn and expose it to the public through port management and firewall rules.
+
+---
+
+## If We Had More Time
+
+If we had more time, we would implement:
+- Natural language processing (NLP) to improve input parsing
+- Fuzzy matching to accept more flexible city name inputs
+- A front-end interface (e.g., React or plain HTML) to interact with the bot visually
